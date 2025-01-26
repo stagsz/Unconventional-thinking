@@ -1,4 +1,4 @@
-# unreasnable-thinker-server MCP Server
+# Unreasnable-thinker-server MCP Server
 
 A detailed tool for bold, unconventional, and boundary-breaking problem-solving.
 
