@@ -1,29 +1,25 @@
-# Unreasnable-thinker-server MCP Server
+# Unreasonable Thinking Server
 
 A detailed tool for bold, unconventional, and boundary-breaking problem-solving.
 
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
+This is a TypeScript-based MCP server that implements an unreasonable thinking system. It helps generate unconventional solutions to problems by:
 
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
+- Generating unreasonable thoughts that challenge conventional wisdom
+- Creating branches of thinking in different directions
+- Tracking and organizing thoughts in a session
 
 ## Features
 
-### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
-
 ### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
-
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
+- `generate_unreasonable_thought` - Generate new unconventional thoughts
+  - Takes a problem description and optional parameters
+  - Can build upon or rebel against previous thoughts
+- `branch_thought` - Create new branches of thinking
+  - Supports different directions: more extreme, opposite, tangential
+  - Maintains connection to source thoughts
+- `list_thoughts` - View all thoughts in the session
+  - Can filter by branch
+  - Shows relationships between thoughts
 
 ## Development
 
@@ -52,8 +48,8 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 ```json
 {
   "mcpServers": {
-    "unreasnable-thinker-server": {
-      "command": "/path/to/unreasnable-thinker-server/build/index.js"
+    "unreasonable-thinking-server": {
+      "command": "/path/to/unreasonable-thinking-server/build/index.js"
     }
   }
 }
@@ -68,4 +64,3 @@ npm run inspector
 ```
 
 The Inspector will provide a URL to access debugging tools in your browser.
-# unconventional-thinking
