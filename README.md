@@ -8,6 +8,8 @@ This is a TypeScript-based MCP server that implements an unreasonable thinking s
 - Creating branches of thinking in different directions
 - Tracking and organizing thoughts in a session
 
+<a href="https://glama.ai/mcp/servers/pam1hp4gtk"><img width="380" height="200" src="https://glama.ai/mcp/servers/pam1hp4gtk/badge" alt="Unconventional-thinking server MCP server" /></a>
+
 ## Features
 
 ### Tools
