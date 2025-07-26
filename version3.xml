@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UnreasonableThinkingServer name="unreasonable-thinking-server" version="0.2.0">
+
+  <!-- ── STATIC CAPABILITIES ─────────────────────────────────────────────── -->
+  <Capabilities>
+    <Tools>
+
+      <Tool name="generate_unreasonable_thought">
+        <Description>
+          Generate a new unreasonable thought that challenges conventional thinking
+        </Description>
+        <InputSchema type="object">
+          <Property name="problem"
+                    type="string"
+                    required="true"
+                    description="The problem or challenge to think unreasonably about"/>
+          <Property name="previousThoughtId"
+                    type="string"
+                    required="false"
+                    description="Optional ID of a previous thought to build upon or rebel against"/>
+          <Property name="forceRebellion"
+                    type="boolean"
+                    required="false"
+                    description="Force the thought to rebel against conventional wisdom"/>
+        </InputSchema>
+      </Tool>
+
+      <Tool name="branch_thought">
+        <Description>Create a new branch of thinking from an existing thought</Description>
+        <InputSchema type="object">
+          <Property name="thoughtId"
+                    type="string"
+                    required="true"
+                    description="ID of the thought to branch from"/>
+          <Property name="direction"
+                    type="string"
+                    required="true"
+                    description="Direction for the new branch (e.g. 'more_extreme', 'opposite', 'tangential')"/>
+        </InputSchema>
+      </Tool>
+
+      <Tool name="list_thoughts">
+        <Description>List all thoughts in the current thinking session</Description>
+        <InputSchema type="object">
+          <Property name="branchId"
+                    type="string"
+                    required="false"
+                    description="Optional branch ID to filter thoughts"/>
+        </InputSchema>
+      </Tool>
+
+    </Tools>
+  </Capabilities>
+
+  <!-- ── RUNTIME SETTINGS ────────────────────────────────────────────────── -->
+  <RuntimeSettings>
+
+    <!-- Authentication & Authorization -->
+    <Auth>
+      <Method>OAuth2</Method>
+      <Scopes>
+        <Scope name="read_thoughts"/>
+        <Scope name="write_thoughts"/>
+        <Scope name="admin"/>
+      </Scopes>
+      <TokenTTL minutes="60"/>
+    </Auth>
+
+    <!-- Input / Output Validation -->
+    <Validation>
+      <SchemaValidator>ajv</SchemaValidator>
+      <MaxStringLength value="4096"/>
+      <RejectUnknownFields>true</RejectUnknownFields>
+      <OutputEncoding>JSON-escaped</OutputEncoding>
+    </Validation>
+
+    <!-- Rate Limiting & Quotas -->
+    <RateLimiting>
+      <GlobalRPS value="50"/>
+      <PerIPRPS value="5"/>
+      <BurstCapacity value="20"/>
+    </RateLimiting>
+
+    <!-- Identifier Generation -->
+    <IdGeneration strategy="uuidv4"/>
+
+    <!-- Persistence Layer -->
+    <Storage>
+      <Engine>PostgreSQL</Engine>
+      <ConnectionPool max="20"/>
+      <PerUserQuota thoughts="1000"/>
+      <Retention days="30"/>
+    </Storage>
+
+    <!-- Memory & Process Safety -->
+    <MemoryWatchdog enabled="true" maxMB="256"/>
+    <GracefulShutdown timeoutSeconds="30"/>
+
+    <!-- Monitoring & Alerting -->
+    <Monitoring>
+      <Metrics>prometheus</Metrics>
+      <AlertThreshold name="error_rate" percent="1.0"/>
+      <AlertThreshold name="latency_p95_ms" value="500"/>
+    </Monitoring>
+
+    <!-- CI / CD Security Gates -->
+    <SecurityScanning>
+      <StaticAnalysis>eslint-plugin-security</StaticAnalysis>
+      <DAST>owasp-zap</DAST>
+      <FailOnCritical>true</FailOnCritical>
+    </SecurityScanning>
+
+  </RuntimeSettings>
+
+  <!-- ── ERROR CODES ─────────────────────────────────────────────────────── -->
+  <ErrorCodes>
+    <Error code="InvalidParams"   httpStatus="400" description="One or more parameters are invalid"/>
+    <Error code="MethodNotFound"  httpStatus="404" description="Requested tool or endpoint does not exist"/>
+    <Error code="RateLimitExceeded" httpStatus="429" description="Too many requests"/>
+    <Error code="Unauthorized"      httpStatus="401" description="Missing or invalid auth token"/>
+    <Error code="InternalError"     httpStatus="500" description="Unhandled server exception"/>
+  </ErrorCodes>
+
+</UnreasonableThinkingServer>

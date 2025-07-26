@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UnreasonableThinkingServer name="unreasonable-thinking-server" version="0.1.0">
+  <Capabilities>
+    <Tools>
+
+      <Tool name="generate_unreasonable_thought">
+        <Description>
+          Generate a new unreasonable thought that challenges conventional thinking
+        </Description>
+        <InputSchema type="object">
+          <Property name="problem"
+                    type="string"
+                    required="true"
+                    description="The problem or challenge to think unreasonably about"/>
+          <Property name="previousThoughtId"
+                    type="string"
+                    required="false"
+                    description="Optional ID of a previous thought to build upon or rebel against"/>
+          <Property name="forceRebellion"
+                    type="boolean"
+                    required="false"
+                    description="Force the thought to rebel against conventional wisdom"/>
+        </InputSchema>
+      </Tool>
+
+      <Tool name="branch_thought">
+        <Description>
+          Create a new branch of thinking from an existing thought
+        </Description>
+        <InputSchema type="object">
+          <Property name="thoughtId"
+                    type="string"
+                    required="true"
+                    description="ID of the thought to branch from"/>
+          <Property name="direction"
+                    type="string"
+                    required="true"
+                    description="Direction for the new branch (e.g. 'more_extreme', 'opposite', 'tangential')"/>
+        </InputSchema>
+      </Tool>
+
+      <Tool name="list_thoughts">
+        <Description>
+          List all thoughts in the current thinking session
+        </Description>
+        <InputSchema type="object">
+          <Property name="branchId"
+                    type="string"
+                    required="false"
+                    description="Optional branch ID to filter thoughts"/>
+        </InputSchema>
+      </Tool>
+
+    </Tools>
+  </Capabilities>
+</UnreasonableThinkingServer>
