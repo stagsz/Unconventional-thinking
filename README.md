@@ -1,8 +1,10 @@
-# Unconventional Thinking Server (v0.2.0)
+# Unconventional Thinking Server (v0.3.0)
 
 A context-efficient MCP server for bold, unconventional, and boundary-breaking problem-solving.
 
 This is a TypeScript-based MCP server that implements an unconventional thinking system optimized for **context space savings** based on Anthropic's latest MCP architecture patterns. It generates and tracks creative solutions to problems while maintaining efficiency.
+
+> **MCP spec 2025-11-25 compliant** — uses `@modelcontextprotocol/sdk` v1.27.1 with tool `title`, `annotations`, `outputSchema`, `structuredContent` responses, and `resource_link` content type.
 
 ## Architecture: Context-Saving Design
 
@@ -32,21 +34,30 @@ This server demonstrates Anthropic's **recommended patterns for reducing context
 
 ## Features
 
-### Tools (All Context-Efficient)
-- `generate_unreasonable_thought` - Generate new unconventional thoughts
-  - Returns metadata + resource URI, not full content
+### Tools (All Context-Efficient, MCP spec 2025-11-25)
+
+Each tool now includes:
+- `title` — human-readable display name shown in client UIs
+- `annotations` — behaviour hints (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`)
+- `outputSchema` — JSON Schema describing the structured result
+- `structuredContent` in responses — machine-readable output conforming to the schema
+- `resource_link` content items — explicit links clients can subscribe to or fetch
+
+---
+
+- `generate_unreasonable_thought` — Generate new unconventional thoughts
+  - Returns `resource_link` + `structuredContent`, not raw text blobs
   - Can build upon or rebel against previous thoughts
   - Full thought content available via Resources API
 
-- `branch_thought` - Create new branches of thinking
-  - Supports directions: more extreme, opposite, tangential
-  - Returns only branch metadata for efficiency
+- `branch_thought` — Create new branches of thinking
+  - Supports directions: `more_extreme`, `opposite`, `tangential` (now enum-typed)
+  - Returns `resource_link` + `structuredContent` for the new branch
 
-- `search_thoughts` - **NEW: Efficient metadata search**
+- `search_thoughts` — Efficient metadata search
   - Filters by branchId, isRebellion, challengesAssumption
-  - Returns only matching IDs and metadata
+  - Returns `structuredContent` with typed count + thoughts array
   - Includes limit parameter to control result size
-  - Demonstrates server-side filtering pattern
 
 ### Resources (On-Demand Content Loading)
 - Each thought available as a resource: `thought://[thoughtId]`
@@ -125,11 +136,11 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 ```
 Claude: Generate an unreasonable thought about scaling problems
 → Tool: generate_unreasonable_thought("scaling problems")
-← Returns: thoughtId, resourceUri, metadata
+← Returns: resource_link (thought://...) + structuredContent { thoughtId, isRebellion, ... }
 
 Claude: What are all the rebellious thoughts?
 → Tool: search_thoughts(isRebellion=true, limit=5)
-← Returns: 5 matching thought IDs with URIs (minimal context)
+← Returns: structuredContent { count, thoughts: [...metadata] }
 
 Claude: I need to see the full content of thought_xyz
 → Resource: Read thought://thought_xyz

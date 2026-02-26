@@ -5,8 +5,8 @@ This document provides comprehensive guidance for AI assistants working with the
 ## Project Overview
 
 **Name**: Unconventional Thinking Server (unreasnable-thinker-server)
-**Version**: 0.2.0
-**Type**: MCP (Model Context Protocol) Server
+**Version**: 0.3.0
+**Type**: MCP (Model Context Protocol) Server — spec 2025-11-25, SDK 1.27.1
 **Purpose**: A context-efficient tool for generating and tracking unconventional, boundary-breaking problem-solving thoughts
 
 This is a TypeScript-based MCP server that implements an unconventional thinking system optimized for **context space savings** based on Anthropic's latest MCP architecture patterns. The server demonstrates recommended patterns for reducing context overhead by 98.7%.
@@ -60,7 +60,7 @@ Storage format: JSON object with thought IDs as keys in `.thoughts/thoughts.json
 
 ### Dependencies
 - **Runtime**: Node.js with ES2022 target
-- **MCP SDK**: `@modelcontextprotocol/sdk@0.6.0` - Core protocol implementation
+- **MCP SDK**: `@modelcontextprotocol/sdk@1.27.1` - Core protocol implementation (spec 2025-11-25)
 - **TypeScript**: `^5.3.3` - Type safety and compilation
 - **Node Types**: `@types/node@^20.11.24` - Node.js type definitions
 
@@ -85,10 +85,10 @@ This makes the compiled binary executable for direct invocation.
 ```typescript
 {
   name: "unconventional-thinking-server",
-  version: "0.2.0",
+  version: "0.3.0",
   capabilities: {
-    tools: {},      // Provides 3 tools
-    resources: {}   // Provides thought:// resources
+    tools: { listChanged: true },  // Provides 3 tools; notifies clients on changes
+    resources: {}                  // Provides thought:// resources
   }
 }
 ```
@@ -279,9 +279,9 @@ When modifying or extending this codebase:
 - Use optional chaining for optional fields (`thought.branchId?.`)
 
 ### 6. Versioning
-- Current version: 0.2.0 (context-efficient refactor)
+- Current version: 0.3.0 (MCP spec 2025-11-25 upgrade)
 - Update version in **both** package.json and server initialization
-- Version 0.2.0 marks the transition to context-efficient architecture
+- Version 0.3.0 adds tool titles, annotations, outputSchema, structuredContent, resource_link
 
 ## Common Development Tasks
 
@@ -383,7 +383,18 @@ With 100 thoughts (500 chars each):
 
 ## Version History
 
-- **v0.2.0** (Current) - Context-efficient refactor
+- **v0.3.0** (Current) - MCP spec 2025-11-25 upgrade
+  - Updated `@modelcontextprotocol/sdk` from `0.6.0` to `1.27.1`
+  - Added `title` to every tool for human-readable display in client UIs
+  - Added `annotations` to every tool (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`)
+  - Added `outputSchema` to every tool to validate structured results
+  - Tools now return `structuredContent` alongside text for typed machine-readable output
+  - `generate_unreasonable_thought` and `branch_thought` return `resource_link` content items instead of URI-in-JSON-text
+  - Tool execution errors (thought not found) now use `isError: true` instead of protocol-level `McpError`
+  - Added `listChanged: true` to the `tools` capability declaration
+  - `branch_thought` `direction` parameter is now enum-typed
+
+- **v0.2.0** - Context-efficient refactor
   - Added Resources API for on-demand content loading
   - Implemented server-side filtering with `search_thoughts`
   - Changed tools to return metadata + URIs only
@@ -413,6 +424,6 @@ With 100 thoughts (500 chars each):
 
 ---
 
-**Last Updated**: 2025-11-24
-**Document Version**: 1.0
-**Codebase Version**: 0.2.0
+**Last Updated**: 2026-02-26
+**Document Version**: 2.0
+**Codebase Version**: 0.3.0

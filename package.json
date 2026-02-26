@@ -1,6 +1,6 @@
 {
   "name": "unreasnable-thinker-server",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A detailed tool for bold, unconventional, and boundary-breaking problem-solving.",
   "private": true,
   "type": "module",
@@ -17,7 +17,7 @@
     "inspector": "npx @modelcontextprotocol/inspector build/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "0.6.0"
+    "@modelcontextprotocol/sdk": "1.27.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
