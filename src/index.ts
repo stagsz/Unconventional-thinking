@@ -12,6 +12,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import * as fs from "fs";
 import * as path from "path";
+import { homedir } from "os";
 
 interface Thought {
   id: string;
@@ -23,7 +24,7 @@ interface Thought {
   timestamp: number;
 }
 
-const DATA_DIR = path.join(process.cwd(), ".thoughts");
+const DATA_DIR = path.join(homedir(), ".unconventional-thinking", ".thoughts");
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
