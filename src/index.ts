@@ -297,7 +297,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         id: thoughtId,
         content: generateUnreasonableThought(
           problem,
-          previousThoughtId ? thoughts[previousThoughtId] : undefined
+          previousThoughtId,
+          previousThoughtId && thoughts[previousThoughtId]
+            ? thoughts[previousThoughtId].content
+            : undefined
         ),
         isRebellion,
         challengesAssumption: Math.random() > 0.3,
@@ -450,7 +453,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 function generateUnreasonableThought(
   problem: string,
-  previousThought?: Thought
+  previousThoughtId?: string,
+  previousThoughtContent?: string
 ): string {
   const unreasonableApproaches = [
     `What if we completely eliminated the concept of ${problem}?`,
@@ -468,8 +472,12 @@ function generateUnreasonableThought(
       Math.floor(Math.random() * unreasonableApproaches.length)
     ];
 
-  if (previousThought) {
-    thought = `Building on: ${previousThought.content}\n\nNew angle: ${thought}`;
+  const previousContent =
+    previousThoughtContent ??
+    (previousThoughtId ? `(continuing from thought ${previousThoughtId})` : undefined);
+
+  if (previousContent) {
+    thought = `Building on: ${previousContent}\n\nNew angle: ${thought}`;
   }
 
   return thought;
